@@ -1,17 +1,33 @@
 const ROCK = "ROCK", PAPER = "PAPER", SCISSOR = "SCISSOR";
-alert("Let's start the game");
-game();
-function game(){
+main();
+function main()
+{
+    alert("Let's start the game");
+    game(displayOutputWithAlert,consoleLog,getPlayerChoiceThroughAlert);
+}
+
+
+function consoleLog(message)
+{
+    console.log(message);
+}
+
+function displayOutputWithAlert(output)
+{
+    alert(output)
+}
+
+function game(displayOutput,log, getPlayerChoice){
     let compScore =0,playerScore = 0;
     for(i=0;i<5;i++)
     {
-        let playerChoice = getPlayerChoice();
+        let playerChoice = getPlayerChoice(log);
         let computerChoice = getComputerChoice();
-        let roundResult = playRound(playerChoice,computerChoice);
+        let roundResult = playRound(playerChoice,computerChoice,log);
         if(!!roundResult === false)continue;
         if(roundResult.includes("Won"))playerScore++;
         else if(roundResult.includes("Lost"))compScore++;
-        alert(roundResult);
+        displayOutput(roundResult);
     }
     let firstPart, secondPart;
     if(playerScore>compScore){
@@ -22,7 +38,7 @@ function game(){
     }
     else firstPart = "Match Drawn"
     secondPart = `Your score ${playerScore}, Computer's score ${compScore}`;
-    alert(firstPart + secondPart);
+    displayOutput(firstPart + secondPart);
 }
 function getComputerChoice()
 {
@@ -40,10 +56,10 @@ function getComputerChoice()
             break;
     }
 }
-function getPlayerChoice()
+function getPlayerChoiceThroughAlert(log)
 {
     let input = prompt("ROCK, PAPER or SCISSOR?");
-    console.log(`Input is ${input} of type ${typeof(input)}`);
+    log(`Input is ${input} of type ${typeof(input)}`);
     return formatInput(input);
 }
 function formatInput(input)
@@ -57,11 +73,11 @@ function getRandomInteger(maxExclusive)
     return Math.floor(Math.random() * maxExclusive);
 }
 
-function playRound(playerChoice,computerChoice)
+function playRound(playerChoice,computerChoice,log)
 {
     if(!isPlayerInputValid(playerChoice))
     {
-        console.log("Incorrect Input. Try again");
+        log("Incorrect Input. Try again");
         return;
     }
     if(playerChoice.localeCompare(computerChoice) == 0)
