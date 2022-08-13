@@ -11,6 +11,8 @@ const Winner = Object.freeze({
 alert("Let's start the game");
 const btns = document.querySelectorAll('button');
 const result = document.querySelector('#result');
+let playerScore= 0 , computerScore = 0;
+
 btns.forEach(btn => btn.addEventListener('click', onButtonClick));
 
 function onButtonClick(e)
@@ -18,7 +20,24 @@ function onButtonClick(e)
     let playerChoice = getPlayerChoiceFromButton(e);
     let computerChoice = getComputerChoice();
     let winner = playRound(playerChoice,computerChoice);
-    divLog(getRoundResultString(playerChoice,computerChoice,winner));
+    let roundResultString = '', gameResultString = '';
+    if(winner === Winner.PLAYER) playerScore++;
+    else if(winner === Winner.COMPUTER) computerScore++;
+    roundResultString = getRoundResultString(playerChoice,computerChoice,winner);
+    if(playerScore === 5)
+    {
+        gameResultString = `You WON. Your score = 5. Computer score = ${computerScore}`;
+        computerScore = 0;
+        playerScore = 0;
+    }
+    else if (computerScore === 5)
+    {
+        gameResultString = `You LOST. Computer's score = 5. Your score = ${playerScore}`;
+        computerScore = 0;
+        playerScore = 0;
+    }
+    else gameResultString = '';
+    divLog(`${roundResultString}. ${gameResultString}`);
 }
 
 function getRoundResultString(playerChoiceElement,computerChoiceElement,winner)
